@@ -1,32 +1,33 @@
 <?php
 
+use App\Http\Controllers\Guests\GuestController;  // Importa il controller guest
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
-use App\Http\Controllers\HomeController as GuestHomeController;
+use App\Http\Controllers\HomeController as AuthenticatedHomeController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Home page pubblica per i guest
+Route::get('/', [GuestController::class, 'index'])->name('guest.home');
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+// Rotta per mostrare i canti di una cantica specifica
+Route::get('/cantica/{canticaId}', [GuestController::class, 'showCantica'])->name('guest.cantica');
+
+// Rotta per mostrare i versi di un canto specifico
+Route::get('/cantica/{canticaId}/canto/{cantoId}', [GuestController::class, 'showCanto'])->name('guest.canto');
+
+// Rotte per l'autenticazione (login, registrazione, ecc.)
 Auth::routes();
 
-Route::get('/home', [GuestHomeController::class, 'index'])->name('home');
+// Home page per gli utenti autenticati
+// Route::get('/home', [AuthenticatedHomeController::class, 'index'])->name('home');
 
-Route::middleware('auth')->name('admin.')->prefix('admin/')->group(
-    function () {
-        // Route::get('home', [AdminHomeController::class, 'index'])->name('home');
+// Rotte per l'area Admin (protette da middleware 'auth')
+Route::middleware('auth')->name('admin.')->prefix('admin/')->group(function () {
+    Route::get('home', [AdminHomeController::class, 'index'])->name('home');
 });
 
 
-// Route::get('admin/admin-home', [AdminHomeController::class, 'index'])->name('admin.home')->middleware('auth');
+// Rotta di fallback - reindirizza tutte le rotte non definite alla home page guest
+Route::fallback(function () {
+    return redirect()->route('guest.home');
+});
