@@ -5,13 +5,14 @@ import HeaderComponent from './components/HeaderComponent.vue';
 export default {
   name: 'App',
   components: {
-    // HeaderComponent, // Registra il componente HeaderComponent
+    HeaderComponent, // Registra il componente HeaderComponent
   },
 };
 </script>
 
 <template>
     <HeaderComponent />
+    <router-view></router-view>
 </template>
 
 
