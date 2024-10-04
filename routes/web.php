@@ -34,6 +34,6 @@ Route::middleware('auth')->name('admin.')->prefix('admin/')->group(function () {
 
 
 // Rotta di fallback - reindirizza tutte le rotte non definite alla home page guest
-// Route::fallback(function () {
-//     return redirect()->route('guest.home');
-// });
+Route::fallback(function () {
+    return redirect()->route('guest.home');
+});

@@ -13,19 +13,24 @@ export default {
   },
   methods: {
     fetchCantiche() {
-      // Esegui una richiesta GET per ottenere la lista delle cantiche dall'API
-      axios.get('http://localhost:8000/api/cantiche')
-        .then(response => {
-          // Assegna i dati delle cantiche all'array cantiche
-          this.cantiche = response.data;
-        })
-        .catch(error => {
-          console.error('Errore durante il recupero delle cantiche:', error);
-        });
-    },
+  console.time('fetchCantiche');
+  axios.get('http://localhost:8000/api/cantiche')
+    .then(response => {
+      console.timeEnd('fetchCantiche');
+      console.time('DOMRendering');
+      this.cantiche = response.data;
+      this.$nextTick(() => {
+        console.timeEnd('DOMRendering');
+      });
+    })
+    .catch(error => {
+      console.error('Errore durante il recupero delle cantiche:', error);
+    });
+},
   },
 };
 </script>
+
 
 <template>
     <div>
